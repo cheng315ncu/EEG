@@ -24,6 +24,9 @@ BASE_PATH/
 │   ├── cwt/
 │   │   ├── dataset_[channel]_train.arrow
 │   │   └── dataset_[channel]_test.arrow
+|   ├── ssq/
+│   │   ├── dataset_[channel]_train.arrow
+│   │   └── dataset_[channel]_test.arrow
 │   └── test_record_[channel].txt
 ├── models/                       # Model checkpoints
 │   ├── [channel]/
