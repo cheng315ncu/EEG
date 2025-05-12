@@ -36,7 +36,7 @@ DS_DIR       = Path("./DS")       # where your .arrow files live
 OUTPUT_ROOT  = Path("./models")   # where checkpoints + logs go
 MODEL_ID     = "google/vit-hybrid-base-bit-384"
 CHANNELS     = ["ECG", "C4-M1"]    # e.g. ["ECG","C4-M1","E1-M2"]
-SUBFOLDERS   = ["CWT", "SSQ"]      # e.g. ["CWT","SSQ"]
+SUBFOLDERS   = ["cwt", "ssq"]      # e.g. ["cwt","ssq"]
 DEVICE       = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ---------------------- Utility: Compute Dataset Mean/Std ---------------------- #
@@ -141,14 +141,13 @@ def compute_metrics(p):
 for ch in CHANNELS:
     for sub in SUBFOLDERS:
         print(f"\n===== CHANNEL={ch}  SUBFOLDER={sub} =====")
-        train_path = DS_DIR / f"{ch}_{sub}_train.arrow"
-        test_path  = DS_DIR / f"{ch}_{sub}_test.arrow"
-        if not train_path.exists() or not test_path.exists():
-            print(f"⚠️ Missing {train_path} or {test_path}, skipping.")
+        train_path = DS_DIR / sub / f"dataset_{ch}_train.arrow"
+        if not train_path.exists():
+            print(f"⚠️ Missing {train_path} skipping.")
             continue
 
-        ds_train = datasets.load_from_disk(str(train_path))
-        ds_test  = datasets.load_from_disk(str(test_path))
+        ds = datasets.load_from_disk(str(train_path))
+        ds_train, ds_test = ds.train_test_split(test_size=0.15) 
 
         # initial class weights
         labels = np.array(ds_train["labels"])
@@ -165,7 +164,7 @@ for ch in CHANNELS:
             MODEL_ID,
             num_labels=num_labels, id2label=id2label, label2id=label2id,
             hidden_dropout_prob=0.12, attention_probs_dropout_prob=0.12,
-            embedding_size=128, depth=[4,6,12]
+            embedding_size=768, depth=[4,6,12]
         )
         model = ViTHybridForImageClassification.from_pretrained(
             MODEL_ID, config=cfg, ignore_mismatched_sizes=True
@@ -175,9 +174,10 @@ for ch in CHANNELS:
         mean_tr, std_tr = compute_mean_std(ds_train)
         mean_te, std_te = compute_mean_std(ds_test)
         proc = ViTHybridImageProcessor.from_pretrained(MODEL_ID)
-        proc.do_normalize = True
+        proc.do_normalize = False
         proc.image_mean    = mean_tr
         proc.image_std     = std_tr
+        proc.do_normalize = True
 
         # transforms
         sz = cfg.image_size
