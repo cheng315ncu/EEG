@@ -13,8 +13,10 @@ MODEL_OUTPUT_PATH = BASE_PATH / "model_output"
 # chs = ["C4-M1", "C3-M2", "F3-M2", "F4-M1"]
 chs = ["C4-M1", "C3-M2", "F3-M2", "F4-M1", "O1-M2", "O2-M1", "E1-M2"]
 
-RANDOM_SEED = 42 # 設定隨機種子以確保可重現性
-random.seed(RANDOM_SEED) # 設定隨機種子
+RANDOM_SEED = 42
+random.seed(RANDOM_SEED)
+
+# The rocord_files can use the same file for all channels if you set random_seed to the same value in previous code
 record_files = np.loadtxt(str(DS_PATH / "cwt" / "test_record_C4-M1.txt"), dtype=str)
 
 ratio = 1
@@ -23,8 +25,8 @@ summary_list = []
 for ch in chs:
 
     data = pl.read_csv(str(MODEL_OUTPUT_PATH / ch / f"{ch}_results_mix_pre.csv"))
-    # random.shuffle(data)  # 隨機打亂資料
-    data = data.sample(fraction=ratio, shuffle=True, seed=RANDOM_SEED)  # 隨機抽樣資料
+    random.shuffle(data)
+    data = data.sample(fraction=ratio, shuffle=True, seed=RANDOM_SEED)
     save_dir = str(MODEL_OUTPUT_PATH / ch)
     if not os.path.exists(save_dir):
         os.makedirs(save_dir, exist_ok=True)
