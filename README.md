@@ -138,4 +138,3 @@ If you use this code, please cite:
 
 - PhysioNet for providing the dataset
 - Hugging Face for the pre-trained model
-- [Add other acknowledgments]
