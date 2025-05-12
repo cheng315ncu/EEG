@@ -32,7 +32,7 @@ EEG_PATH = Path(
 OUTPUT_PATH = Path.cwd() / "Graph_Test"
 PROCESSES = 10
 WAVELET = 'morlet'
-MODE = 'both'  # options: 'cwt', 'ssq', 'both'
+MODE = 'cwt'  # options: 'cwt', 'ssq', 'both'
 USE_MNE = False  # whether to apply MNE ICA denoising
 CHANNELS = None  # list channels or None for all
 SAMPLE_SEC = 30
@@ -158,7 +158,8 @@ def process_record(j):
     logging.info(f"Starting {record}")
     try:
         rec = read_eeg(record); ann = read_arousal(record)
-        fs = rec.fs; p_signal = rec.p_signal; ch_names = rec.sig_name
+        fs = rec.fs; p_signal = rec.p_signal #; ch_names = rec.sig_name
+        ch_names = ["C4-M1"]
         labels, nums = get_valid_informations(ann.aux_note)
 
         record_dir = OUTPUT_PATH / record
