@@ -7,7 +7,7 @@ This project implements a complete pipeline for processing EEG signals and train
 
 ## Dataset
 
-This project uses the [PhysioNet Challenge 2018](https://physionet.org/content/challenge-2018/1.0.0/) dataset, which focuses on automatic detection of sleep arousals. The dataset includes:
+This project uses the [PhysioNet Challenge 2017](https://physionet.org/content/challenge-2017/1.0.0/) dataset, which focuses on automatic detection of sleep arousals. The dataset includes:
 - Polysomnographic recordings from sleep studies
 - Multiple physiological signals including EEG, ECG, and EMG
 - Expert-annotated arousal events
