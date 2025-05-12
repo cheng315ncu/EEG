@@ -26,7 +26,7 @@ This project uses the [ViT-Hybrid-Base-Bit-384](https://huggingface.co/google/vi
 - Transformer encoder layers
 - Pre-trained on ImageNet-21k and fine-tuned on ImageNet-1k
 
-The model is particularly well-suited for our EEG spectrogram classification task due to its:
+The model for our EEG spectrogram reachs about 65% Top_1 Acc and over 93% Top_2 Acc at single-channel EEG sleep stage classification task due to its:
 - Hybrid architecture that can capture both local and global features
 - Pre-trained weights that provide strong feature extraction capabilities
 - 384x384 input resolution that matches our spectrogram dimensions
